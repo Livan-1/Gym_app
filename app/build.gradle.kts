@@ -46,7 +46,7 @@ android {
 }
 
 dependencies {
-
+    implementation("androidx.activity:activity-compose:1.8.2") // O una versión más nueva
     implementation("androidx.compose.foundation:foundation:1.6.7")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -56,6 +56,16 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    val cameraVersion = "1.3.1"
+    implementation("androidx.camera:camera-camera2:$cameraVersion")
+    implementation("androidx.camera:camera-lifecycle:$cameraVersion")
+    implementation("androidx.camera:camera-view:$cameraVersion")
+
+    // Para el QR (ML Kit)
+    implementation("com.google.mlkit:barcode-scanning:17.2.0")
+
+    // Iconos extendidos (opcional, si te da error Icons.Default.CameraAlt)
+    implementation("androidx.compose.material:material-icons-extended:1.5.4")
 
 
     // Dependencia para la navegación con Jetpack Compose

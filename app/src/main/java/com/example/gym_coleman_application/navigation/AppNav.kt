@@ -6,14 +6,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.gym_coleman_application.ui.theme.login.LoginScreen
-import com.example.gym_coleman_application.view.ProductoFormScreen
-import com.example.gym_coleman_application.view.DrawerMenu
-import com.example.gym_coleman_application.view.MapScreen
-import com.example.gym_coleman_application.ui.theme.login.RegisterScreen
 import com.example.gym_coleman_application.R
-import com.example.gym_coleman_application.ui.theme.home.ExerciseScreen
 
+// --- IMPORTS DE TUS PANTALLAS ---
+import com.example.gym_coleman_application.ui.theme.login.LoginScreen
+import com.example.gym_coleman_application.ui.theme.login.RegisterScreen
+import com.example.gym_coleman_application.ui.theme.qr.QrScannerScreen // <--- Tu Scanner
+import com.example.gym_coleman_application.view.DrawerMenu
+import com.example.gym_coleman_application.view.ProductoFormScreen
+import com.example.gym_coleman_application.view.MapScreen
+import com.example.gym_coleman_application.ui.theme.home.ExerciseScreen
 
 @Composable
 fun AppNav() {
@@ -25,16 +27,18 @@ fun AppNav() {
         startDestination = "login"
     ) {
 
-        // 🔹 LOGIN
+        // 🔹 LOGIN (Corregido)
         composable("login") {
             LoginScreen(
                 navController = navController,
                 onLoginSuccess = { username ->
+                    // Al loguearse, vamos al menú y borramos el login del historial
                     navController.navigate("DrawerMenu/$username") {
                         popUpTo("login") { inclusive = true }
                     }
                 },
                 onRegisterClick = {
+                    // AQUÍ ESTABA TU ERROR ANTES: Ahora sí le pasamos la acción
                     navController.navigate("register")
                 }
             )
@@ -52,13 +56,27 @@ fun AppNav() {
             )
         }
 
-        // 🔹 DRAWER
+        // 🔹 DRAWER (Menú Principal)
         composable(
             "DrawerMenu/{username}",
             arguments = listOf(navArgument("username") { type = NavType.StringType })
         ) { backStackEntry ->
             val username = backStackEntry.arguments?.getString("username").orEmpty()
             DrawerMenu(username = username, navController = navController)
+        }
+
+        // 📷 ESCÁNER QR (Tu nueva funcionalidad)
+        composable("qr_scanner") {
+            QrScannerScreen(
+                onQrScanned = { codigoLeido ->
+                    // Acción al detectar un QR
+                    println("QR LEÍDO: $codigoLeido")
+
+                    // Por ahora, volvemos atrás al escanear.
+                    // Si quisieras ir a un producto, podrías hacer un 'if' aquí.
+                    navController.popBackStack()
+                }
+            )
         }
 
         // 🔹 FORMULARIO PRODUCTO
@@ -87,11 +105,9 @@ fun AppNav() {
             MapScreen()
         }
 
-        // ⭐ Entrenamientos
+        // ⭐ ENTRENAMIENTOS
         composable("trainings") {
             ExerciseScreen()
         }
-
-
     }
 }
