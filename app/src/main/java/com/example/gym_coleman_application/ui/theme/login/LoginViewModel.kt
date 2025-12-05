@@ -1,35 +1,41 @@
 package com.example.gym_coleman_application.ui.theme.login
 
+
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.gym_coleman_application.data.repository.AuthRepository
 
-class LoginViewModel (
+class LoginViewModel(
     private val repo: AuthRepository = AuthRepository()
-): ViewModel(){ // inicio VM
-    var uiState by mutableStateOf(LoginUiState() )
+) : ViewModel() {
 
-    fun onUsernameChange(value:String){
-        uiState=uiState.copy(username=value,error=null)
+    var uiState by mutableStateOf(LoginUiState())
+        private set
+
+    fun onUsernameChange(value: String) {
+        uiState = uiState.copy(username = value, error = null)
     }
 
-    fun onPasswordChange(value:String){
-        uiState=uiState.copy(password=value,error=null)
+    fun onPasswordChange(value: String) {
+        uiState = uiState.copy(password = value, error = null)
     }
 
-    fun submit(onSucces:(String) -> Unit  ){
+    fun submit(onSuccess: (String) -> Unit) {
+        uiState = uiState.copy(isLoading = true, error = null)
 
-        uiState=uiState.copy(isLoading=true, error=null)
+        val ok = repo.login(
+            user = uiState.username.trim(),
+            pass = uiState.password
+        )
 
-        val oK=repo.login(uiState.username.trim(),uiState.password)
+        if (ok) {
+            onSuccess(uiState.username.trim())
+        } else {
+            uiState = uiState.copy(error = "Credenciales inválidas")
+        }
 
-        // Resultados
-        if(oK) onSucces(uiState.username.trim())
-        else uiState =uiState.copy(error="Credenciales invalidas")
-
+        uiState = uiState.copy(isLoading = false)
     }
-
-
-}// fin VM
+}

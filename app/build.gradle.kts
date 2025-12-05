@@ -64,10 +64,30 @@ dependencies {
 // Íconos (core opcional) y EXTENDIDOS (¡este es el clave!)
     implementation("androidx.compose.material:material-icons-core")
     implementation("androidx.compose.material:material-icons-extended")
+    // Google Maps Compose
+    implementation("com.google.maps.android:maps-compose:2.11.4")
+
+// Google Play Services Maps
+    implementation("com.google.android.gms:play-services-maps:18.1.0")
+
+// Places API (para buscar gimnasios después)
+    implementation("com.google.android.libraries.places:places:3.2.0")
+
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+
+// Gson Converter
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+// OkHttp (opcional pero recomendado)
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+
+
 
     // Dependencias Room
     implementation("androidx.room:room-runtime:2.6.1")
-    implementation(libs.androidx.compose.foundation)  // Versión actualizada
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)  // Versión actualizada
     kapt("androidx.room:room-compiler:2.6.1")          // Misma versión
     implementation("androidx.room:room-ktx:2.6.1")     // Misma versión
 
